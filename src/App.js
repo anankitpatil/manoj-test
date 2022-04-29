@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Game from "./Game";
+import "./App.css";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+  const [word, setWord] = useState("");
+
+  const getWords = () => {
+    fetch("https://random-word-api.herokuapp.com/word?number=3")
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          let found = false;
+          result.forEach((item) => {
+            if (item.length === 7) {
+              setWord(item);
+              console.log(item);
+              setLoading(false);
+              found = true;
+            }
+          });
+          !found && getWords();
+        },
+        (error) => console.log(error)
+      );
+  };
+
+  useEffect(() => {
+    getWords();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="random">
+      {loading ? "Loading..." : <Game word={word} />}
     </div>
   );
 }
