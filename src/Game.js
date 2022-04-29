@@ -40,15 +40,7 @@ export default function Game({ word }) {
     <div className="game">
       {[...word].map((item, i) => {
         return (
-          <input
-            type="text"
-            className="word"
-            key={i}
-            num={i}
-            id={`box-${i}`}
-            letter={item}
-            disabled
-          />
+          <input type="text" className="word" key={i} letter={item} disabled />
         );
       })}
       <div className="keyboard">
